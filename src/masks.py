@@ -28,4 +28,6 @@ def get_mask_card_number(card_number: str) -> str:
 
 def get_mask_account(account_number: str) -> str:
     """Функция приема номера счета пользователя"""
+    if not account_number or len(account_number) < 4:
+        return "Введен некорректный номер счета"
     return f"**{account_number[-4:]}"
