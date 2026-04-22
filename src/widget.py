@@ -2,28 +2,43 @@ from .masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(full_info: str) -> str:
-    """Принимает строку '{оператор} {номер}' и выводит номера с маской"""
+    """Принимает строку 'Оператор Номер' и возвращает замаскированный результат"""
 
-    # сокращенный цикл вывода оператора
-    operator_name = "".join(char for char in full_info if not char.isdigit())
-    # сокращенный цикл вывода номера карты/счета
-    account_number = "".join(char for char in full_info if char.isdigit())
+    if not isinstance(full_info, str) or not full_info.strip():
+        return ""
 
-    # определение счет или карта
-    if operator_name.startswith("Счет"):
-        masked_number = get_mask_account(account_number)
+    parts = full_info.split()
+
+    operator_name = " ".join([p for p in parts if not any(c.isdigit() for c in p)])
+
+    number = "".join(char for char in full_info if char.isdigit())
+
+    # если цифр нет → вернуть как есть
+    if not number:
+        return full_info
+
+    # короткий номер НЕ обрабатываем вообще
+    if len(number) < 6:
+        return full_info
+
+    # счёт
+    if "Счет" in operator_name:
+        masked_number = get_mask_account(number)
     else:
-        masked_number = get_mask_card_number(account_number)
+        masked_number = get_mask_card_number(number)
 
     return f"{operator_name} {masked_number}"
 
 
 def get_date(date: str) -> str:
-    """Принимает полную дату и выводит 'год-месяц-день'"""
-    modified_date = "".join(char for char in date if char.isdigit())
+    """Преобразует дату в формат DD.MM.YYYY"""
 
-    year = modified_date[:4]
-    month = modified_date[4:6]
-    day = modified_date[6:8]
+    if not isinstance(date, str):
+        return ""
 
-    return f"{day}.{month}.{year}"
+    digits = "".join(char for char in date if char.isdigit())
+
+    if len(digits) < 8:
+        return ""
+
+    return f"{digits[6:8]}.{digits[4:6]}.{digits[:4]}"
