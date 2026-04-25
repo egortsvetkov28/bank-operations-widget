@@ -31,7 +31,7 @@ def test_mask_account_card(card_cases: list[tuple[str, str]]) -> None:
 
 # edge-case защита
 @pytest.mark.parametrize(
-    "bad_input: Any",
+    "bad_input",
     [
         None,
         "",
