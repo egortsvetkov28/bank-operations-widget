@@ -1,4 +1,5 @@
 import os
+
 import requests
 from dotenv import load_dotenv
 
@@ -16,10 +17,7 @@ def get_exchange_rate(currency: str) -> float:
 
     headers = {"apikey": API_KEY}
 
-    params = {
-        "base": currency,
-        "symbols": "RUB"
-    }
+    params = {"base": currency, "symbols": "RUB"}
 
     response = requests.get(url, headers=headers, params=params)
     data = response.json()

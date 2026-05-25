@@ -1,4 +1,3 @@
-import pytest
 from src.utils import load_transactions
 
 
