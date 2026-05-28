@@ -1,33 +1,63 @@
+import logging
+
+logger = logging.getLogger("masks")
+logger.setLevel(logging.DEBUG)
+
+file_handler = logging.FileHandler("logs/masks.log", encoding="utf-8")
+file_handler.setLevel(logging.DEBUG)
+
+file_formatter = logging.Formatter("%(asctime)s | %(name)s | %(levelname)s | %(message)s")
+
+file_handler.setFormatter(file_formatter)
+
+logger.addHandler(file_handler)
+logger.propagate = False
+
+
 def get_mask_card_number(card_number: str) -> str:
-    """Функция приема номера карты пользователя"""
-    # проверка ввода на "" или None
+    """Маскировка номера карты"""
+
+    logger.info("Начало обработки номера карты")
+
     if not card_number:
+        logger.error("Пустой номер карты")
         return "Введен некорректный номер карты"
-    # проверка кода на наличие "*", "-", "&" итд.
+
     if not all(char.isdigit() or char.isspace() for char in card_number):
+        logger.error("Некорректные символы в номере карты")
         return "Введен некорректный номер карты"
-    # удаление пробелов
+
     card_number = card_number.replace(" ", "")
-    # проверка ввода на минимальную длину строки
+
     if len(card_number) < 10:
+        logger.error("Слишком короткий номер карты")
         return "Введен слишком короткий номер карты"
 
-    edit_card_number = ""
+    result = ""
 
     for i in range(len(card_number)):
         if 6 <= i < len(card_number) - 4:
-            edit_card_number += "*"
+            result += "*"
         else:
-            edit_card_number += card_number[i]
+            result += card_number[i]
 
         if (i + 1) % 4 == 0 and i != len(card_number) - 1:
-            edit_card_number += " "
+            result += " "
 
-    return edit_card_number
+    logger.info("Успешная маскировка карты")
+    return result
 
 
 def get_mask_account(account_number: str) -> str:
-    """Функция приема номера счета пользователя"""
+    """Маскировка номера счета"""
+
+    logger.info("Начало обработки счета")
+
     if not account_number or len(account_number) < 4:
+        logger.error("Некорректный номер счета")
         return "Введен некорректный номер счета"
-    return f"**{account_number[-4:]}"
+
+    result = f"**{account_number[-4:]}"
+
+    logger.info("Успешная маскировка счета")
+    return result
