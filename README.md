@@ -83,6 +83,13 @@ add ok
 add error: ZeroDivisionError. Inputs: (1, 0), {}
 ```
 ---
+## Работа с CSV и Excel файлами
+
+Добавлена поддержка загрузки финансовых операций из файлов:
+
+```python
+from src.file_readers import read_csv_transactions, read_excel_transactions
+```
 ## Тестирование
 В проекте используется библиотека pytest для автоматического тестирования.
 
